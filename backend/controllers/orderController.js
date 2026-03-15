@@ -1,11 +1,17 @@
 const Order = require("../models/Order");
 
+
 // Create order
 exports.createOrder = async (req,res)=>{
 
  try{
 
-  const order = await Order.create(req.body);
+  const orderData = {
+   ...req.body,
+   userId: req.user.id   // attach logged in user
+  };
+
+  const order = await Order.create(orderData);
 
   res.status(201).json(order);
 
@@ -17,12 +23,15 @@ exports.createOrder = async (req,res)=>{
 
 };
 
-// Get all orders
+
+// Get orders for logged in user
 exports.getOrders = async (req,res)=>{
 
  try{
 
-  const orders = await Order.find();
+  const orders = await Order.find({
+   userId:req.user.id
+  }).sort({createdAt:-1});
 
   res.json(orders);
 
@@ -33,6 +42,7 @@ exports.getOrders = async (req,res)=>{
  }
 
 };
+
 
 // Update order status
 exports.updateOrderStatus = async (req,res)=>{

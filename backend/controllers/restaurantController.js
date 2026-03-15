@@ -71,3 +71,19 @@ exports.deleteRestaurant = async (req, res) => {
   }
 
 };
+
+exports.getCities = async (req, res) => {
+
+  try {
+
+    const cities = await Restaurant.distinct("location");
+
+    res.json(cities);
+
+  } catch (err) {
+
+    res.status(500).json(err);
+
+  }
+
+};
