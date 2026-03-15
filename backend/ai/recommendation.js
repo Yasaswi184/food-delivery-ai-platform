@@ -1,9 +1,16 @@
-module.exports = (orders)=>{
+const Menu = require("../models/Menu");
 
-// simple recommendation logic
+const getRecommendations = async (restaurantId) => {
 
-const suggestions = ["Garlic Bread","Cheese Dip","Coke"];
+  const menu = await Menu.find({ restaurantId });
 
-return suggestions[Math.floor(Math.random()*suggestions.length)];
+  // simple recommendation logic
+  const recommended = menu
+    .sort((a,b)=>b.price-a.price)
+    .slice(0,3);
+
+  return recommended;
 
 };
+
+module.exports = getRecommendations;
